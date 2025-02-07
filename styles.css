@@ -1,0 +1,52 @@
+/* Style for highlighted Solana addresses and tickers */
+.sol-highlight {
+    background-color: #e0f7fa; /* Light blue background */
+    color: #00796b; /* Dark teal text */
+    padding: 2px 4px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .sol-highlight:hover {
+    background-color: #b2ebf2; /* Slightly darker blue on hover */
+  }
+  
+  /* Style for the popover */
+  .sol-popover {
+    position: absolute;
+    background-color: #ffffff; /* White background */
+    border: 1px solid #ddd; /* Light gray border */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    padding: 12px;
+    font-family: Arial, sans-serif;
+    z-index: 1000; /* Ensure it appears above other content */
+    max-width: 250px;
+    word-wrap: break-word;
+  }
+  
+  .sol-popover h3 {
+    margin: 0 0 8px 0;
+    font-size: 16px;
+    font-weight: bold;
+    color: #00796b; /* Dark teal for headings */
+  }
+  
+  .sol-popover div {
+    margin: 4px 0;
+    font-size: 14px;
+    color: #333; /* Dark gray for text */
+  }
+  
+  .sol-popover hr {
+    border: 0;
+    height: 1px;
+    background-color: #ddd; /* Light gray separator */
+    margin: 8px 0;
+  }
+  
+  .sol-popover strong {
+    font-weight: bold;
+    color: #00796b; /* Dark teal for strong text */
+  }

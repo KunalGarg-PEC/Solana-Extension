@@ -1,0 +1,12 @@
+{
+    "manifest_version": 3,
+    "name": "Solana Token Highlighter",
+    "version": "1.0",
+    "permissions": ["activeTab", "scripting"],
+    "host_permissions": ["*://*/*"],
+    "content_scripts": [{
+      "matches": ["*://*/*"],
+      "css": ["styles.css"],
+      "js": ["content.js"]
+    }]
+  }
