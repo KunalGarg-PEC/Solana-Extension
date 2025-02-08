@@ -1,16 +1,22 @@
-const SOLANA_ADDRESS_REGEX = /CA:([A-Za-z0-9]{10,})/gi;
+const SOLANA_ADDRESS_REGEX = /CA:\s*([A-Za-z0-9]{10,})/i; // Removed 'g' flag
+
 const TICKER_REGEX = /\$([A-Za-z]+)\b/g;
 
 let currentPopover = null;
 
 async function fetchMintInfo(mintAddress, popover) {
   try {
-    const response = await fetch(
-      `https://www.mightx.io/api/mint-info?mint-address=${mintAddress}`
-    );
-    if (!response.ok) throw new Error("API response not OK");
-    const data = await response.json();
+    // Send request through background script
+    const { data, error } = await new Promise((resolve) => {
+      chrome.runtime.sendMessage(
+        { type: "fetchMintInfo", mintAddress },
+        (response) => resolve(response)
+      );
+    });
 
+    if (error) throw new Error(error);
+
+    // Rest of your existing processing code remains the same
     const decimals = parseInt(data.mintSnap.decimals) || 6;
 
     const formatValue = (valueStr) => {
@@ -50,6 +56,7 @@ async function fetchMintInfo(mintAddress, popover) {
     mintData.style.display = "block";
     errorElement.style.display = "none";
   } catch (error) {
+    console.error("Fetch error:", error);
     const loading = popover.querySelector("#loading");
     const mintData = popover.querySelector("#mintData");
     const errorElement = popover.querySelector("#error");
@@ -67,12 +74,13 @@ function createPopover(text, element) {
   popover.className = "sol-popover";
 
   let mintAddress = "";
-  if (text.startsWith("CA:")) {
-    mintAddress = text.split("CA:")[1].trim();
+  const solanaMatch = text.match(SOLANA_ADDRESS_REGEX); // Use corrected regex without 'g' flag
+  if (solanaMatch) {
+    mintAddress = solanaMatch[1].trim(); // Correctly captures the address
   }
 
   popover.innerHTML = `
-    <h3>${text.startsWith("$") ? "Token" : "Address"}</h3>
+   <h3>${solanaMatch ? "Address" : "Token"}</h3>
     <div>${text}</div>
     <hr>
     <div id="mintInfo">
@@ -108,7 +116,7 @@ function createPopover(text, element) {
   }
 }
 
-// Rest of the original code remains the same
+// Rest of the code remains unchanged
 function processTextNode(node) {
   const parent = node.parentElement;
   if (parent.classList.contains("sol-highlight")) return;
