@@ -3,63 +3,130 @@ const TICKER_REGEX = /\$([A-Za-z]+)\b/g;
 
 let currentPopover = null;
 
-async function fetchJoke(popover) {
+async function fetchMintInfo(mintAddress, popover) {
   try {
-    const response = await fetch('https://icanhazdadjoke.com/slack');
-    const jokeData = await response.json();
-    const jokeText = jokeData.attachments[0].text;
-    const jokeElement = popover.querySelector('#jokeElement');
-    if (jokeElement) jokeElement.textContent = jokeText;
+    const response = await fetch(
+      `https://www.mightx.io/api/mint-info?mint-address=${mintAddress}`
+    );
+    if (!response.ok) throw new Error("API response not OK");
+    const data = await response.json();
+
+    const decimals = parseInt(data.mintSnap.decimals) || 6;
+
+    const formatValue = (valueStr) => {
+      try {
+        const value = BigInt(valueStr);
+        return (Number(value) / 10 ** decimals).toLocaleString();
+      } catch {
+        return valueStr;
+      }
+    };
+
+    const createdAtDate = new Date(parseInt(data.pumpfunSnap.createdAt) * 1000);
+
+    // Update popover elements
+    const loading = popover.querySelector("#loading");
+    const mintData = popover.querySelector("#mintData");
+    const errorElement = popover.querySelector("#error");
+
+    popover.querySelector("#devBuy").textContent = formatValue(
+      data.holderStatSnap.devBuy
+    );
+    popover.querySelector("#sniperBuy").textContent = formatValue(
+      data.holderStatSnap.sniperBuy
+    );
+    popover.querySelector("#t10HoldingPct").textContent =
+      data.holderStatSnap.t10HoldingPct;
+    popover.querySelector("#holders").textContent = data.holderStatSnap.holders;
+    popover.querySelector("#susCount").textContent =
+      data.holderStatSnap.susCount;
+    popover.querySelector("#createdAt").textContent =
+      createdAtDate.toLocaleDateString();
+    popover.querySelector("#baseReserve").textContent = formatValue(
+      data.pumpfunSnap.baseReserve
+    );
+
+    loading.style.display = "none";
+    mintData.style.display = "block";
+    errorElement.style.display = "none";
   } catch (error) {
-    const jokeElement = popover.querySelector('#jokeElement');
-    if (jokeElement) jokeElement.textContent = 'Could not fetch joke 😢';
+    const loading = popover.querySelector("#loading");
+    const mintData = popover.querySelector("#mintData");
+    const errorElement = popover.querySelector("#error");
+
+    loading.style.display = "none";
+    mintData.style.display = "none";
+    errorElement.style.display = "block";
   }
 }
 
 function createPopover(text, element) {
   if (currentPopover) currentPopover.remove();
 
-  const popover = document.createElement('div');
-  popover.className = 'sol-popover';
+  const popover = document.createElement("div");
+  popover.className = "sol-popover";
+
+  let mintAddress = "";
+  if (text.startsWith("CA:")) {
+    mintAddress = text.split("CA:")[1].trim();
+  }
+
   popover.innerHTML = `
-    <h3>${text.startsWith('$') ? 'Token' : 'Address'}</h3>
+    <h3>${text.startsWith("$") ? "Token" : "Address"}</h3>
     <div>${text}</div>
     <hr>
-    <p id="jokeElement">Loading joke...</p>
-    <strong>Dummy Data:</strong>
-    <div>Price: $0.00</div>
+    <div id="mintInfo">
+      <p id="loading">Loading data...</p>
+      <div id="mintData" style="display: none;">
+        <strong>Mint Data:</strong>
+        <div>Dev Buy: <span id="devBuy"></span></div>
+        <div>Sniper Buy: <span id="sniperBuy"></span></div>
+        <div>Top 10 Holding %: <span id="t10HoldingPct"></span>%</div>
+        <div>Holders: <span id="holders"></span></div>
+        <div>Suspicious Count: <span id="susCount"></span></div>
+        <div>Created At: <span id="createdAt"></span></div>
+        <div>Base Reserve: <span id="baseReserve"></span></div>
+      </div>
+      <p id="error" style="display: none; color: red;">Could not fetch data 😢</p>
+    </div>
   `;
 
   const rect = element.getBoundingClientRect();
   popover.style.top = `${rect.bottom + window.scrollY + 5}px`;
   popover.style.left = `${rect.left + window.scrollX}px`;
-  
+
   document.body.appendChild(popover);
   currentPopover = popover;
-  
-  // Fetch and display joke immediately
-  fetchJoke(popover);
+
+  if (mintAddress) {
+    fetchMintInfo(mintAddress, popover);
+  } else {
+    const loading = popover.querySelector("#loading");
+    const mintData = popover.querySelector("#mintData");
+    loading.textContent = "Hover a Solana address (CA:...) for data";
+    mintData.style.display = "none";
+  }
 }
 
-// Rest of the code remains the same
+// Rest of the original code remains the same
 function processTextNode(node) {
   const parent = node.parentElement;
-  if (parent.classList.contains('sol-highlight')) return;
+  if (parent.classList.contains("sol-highlight")) return;
 
   const text = node.textContent;
-  
-  // Process Solana addresses
-  let newHtml = text.replace(SOLANA_ADDRESS_REGEX, match => 
-    `<span class="sol-highlight">${match}</span>`
+
+  let newHtml = text.replace(
+    SOLANA_ADDRESS_REGEX,
+    (match) => `<span class="sol-highlight">${match}</span>`
   );
-  
-  // Process tickers
-  newHtml = newHtml.replace(TICKER_REGEX, match => 
-    `<span class="sol-highlight">${match}</span>`
+
+  newHtml = newHtml.replace(
+    TICKER_REGEX,
+    (match) => `<span class="sol-highlight">${match}</span>`
   );
 
   if (newHtml !== text) {
-    const wrapper = document.createElement('span');
+    const wrapper = document.createElement("span");
     wrapper.innerHTML = newHtml;
     node.replaceWith(wrapper);
   }
@@ -69,9 +136,11 @@ function initializeHighlights() {
   const walker = document.createTreeWalker(
     document.body,
     NodeFilter.SHOW_TEXT,
-    { acceptNode: node => 
-      !node.parentElement.classList.contains('sol-highlight') ? 
-      NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT 
+    {
+      acceptNode: (node) =>
+        !node.parentElement.classList.contains("sol-highlight")
+          ? NodeFilter.FILTER_ACCEPT
+          : NodeFilter.FILTER_REJECT,
     }
   );
 
@@ -82,7 +151,7 @@ function initializeHighlights() {
 
 function debounce(func, wait) {
   let timeout;
-  return function(...args) {
+  return function (...args) {
     clearTimeout(timeout);
     timeout = setTimeout(() => func.apply(this, args), wait);
   };
@@ -90,8 +159,8 @@ function debounce(func, wait) {
 
 const debouncedInitializeHighlights = debounce(initializeHighlights, 100);
 
-document.addEventListener('mouseover', (e) => {
-  const target = e.target.closest('.sol-highlight');
+document.addEventListener("mouseover", (e) => {
+  const target = e.target.closest(".sol-highlight");
   if (!target) {
     if (currentPopover) {
       currentPopover.remove();
@@ -107,5 +176,5 @@ document.addEventListener('mouseover', (e) => {
 initializeHighlights();
 new MutationObserver(debouncedInitializeHighlights).observe(document.body, {
   childList: true,
-  subtree: true
+  subtree: true,
 });
