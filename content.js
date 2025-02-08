@@ -46,11 +46,11 @@ async function fetchMintInfo(mintAddress, popover) {
     popover.querySelector("#holders").textContent = data.holderStatSnap.holders;
     popover.querySelector("#susCount").textContent =
       data.holderStatSnap.susCount;
-    popover.querySelector("#createdAt").textContent =
-      createdAtDate.toLocaleDateString();
-    popover.querySelector("#baseReserve").textContent = formatValue(
-      data.pumpfunSnap.baseReserve
-    );
+    popover.querySelector("#bundleCount").textContent =
+      data.holderStatSnap.bundleCount;
+    popover.querySelector("#termHoldingPct").textContent = 
+      data.holderStatSnap.termHoldingPct;
+    
 
     loading.style.display = "none";
     mintData.style.display = "block";
@@ -92,8 +92,8 @@ function createPopover(text, element) {
         <div>Top 10 Holding %: <span id="t10HoldingPct"></span>%</div>
         <div>Holders: <span id="holders"></span></div>
         <div>Suspicious Count: <span id="susCount"></span></div>
-        <div>Created At: <span id="createdAt"></span></div>
-        <div>Base Reserve: <span id="baseReserve"></span></div>
+        <div>Bundle Count: <span id="bundleCount"></span></div>
+        <div>Term Holding Pct: <span id="termHoldingPct"></span></div>
       </div>
       <p id="error" style="display: none; color: red;">Could not fetch data 😢</p>
     </div>

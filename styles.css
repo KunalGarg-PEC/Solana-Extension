@@ -1,52 +1,67 @@
 /* Style for highlighted Solana addresses and tickers */
 .sol-highlight {
-    background-color: #e0f7fa; /* Light blue background */
-    color: #00796b; /* Dark teal text */
-    padding: 2px 4px;
-    border-radius: 3px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-  }
-  
-  .sol-highlight:hover {
-    background-color: #b2ebf2; /* Slightly darker blue on hover */
-  }
-  
-  /* Style for the popover */
-  .sol-popover {
-    position: absolute;
-    background-color: #b10b0b; /* White background */
-    border: 1px solid #ddd; /* Light gray border */
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-    padding: 12px;
-    font-family: Arial, sans-serif;
-    z-index: 1000; /* Ensure it appears above other content */
-    max-width: 250px;
-    word-wrap: break-word;
-  }
-  
-  .sol-popover h3 {
-    margin: 0 0 8px 0;
-    font-size: 16px;
-    font-weight: bold;
-    color: #00796b; /* Dark teal for headings */
-  }
-  
-  .sol-popover div {
-    margin: 4px 0;
-    font-size: 14px;
-    color: #333; /* Dark gray for text */
-  }
-  
-  .sol-popover hr {
-    border: 0;
-    height: 1px;
-    background-color: #ddd; /* Light gray separator */
-    margin: 8px 0;
-  }
-  
-  .sol-popover strong {
-    font-weight: bold;
-    color: #00796b; /* Dark teal for strong text */
-  }
+  background-color: transparent;
+  color: #ffffff; /* White text */
+  font-weight: bold;
+  padding: 2px 4px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.sol-highlight:hover {
+  color: #00ff00; /* Neon green hover effect */
+}
+
+/* Style for the popover */
+.sol-popover {
+  position: absolute;
+  background-color: #0d0d0d; /* Dark background */
+  border: 1px solid #333; /* Dark gray border */
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Stronger shadow */
+  padding: 12px;
+  font-family: Arial, sans-serif;
+  z-index: 1000;
+  max-width: 250px;
+  word-wrap: break-word;
+  color: #ffffff; /* White text */
+}
+
+/* Header */
+.sol-popover h3 {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  font-weight: bold;
+  color: #00ff00; /* Neon green */
+}
+
+/* Text inside popover */
+.sol-popover div {
+  margin: 4px 0;
+  font-size: 14px;
+  color: #ccc; /* Light gray */
+}
+
+/* Separator */
+.sol-popover hr {
+  border: 0;
+  height: 1px;
+  background-color: #333; /* Dark gray separator */
+  margin: 8px 0;
+}
+
+/* Labels */
+.sol-popover strong {
+  font-weight: bold;
+  color: #ff9800; /* Orange */
+}
+
+/* Specific data colors */
+#devBuy { color: #3399ff; } /* Blue */
+#sniperBuy { color: #ff4444; } /* Red */
+#t10HoldingPct { color: #ffcc00; } /* Yellow */
+#holders { color: #ffffff; } /* White */
+#susCount { color: #ff4444; } /* Red */
+#bundleCount { color: #9933ff; } /* Purple */
+#termHoldingPct { color: #33cc33; } /* Green */
