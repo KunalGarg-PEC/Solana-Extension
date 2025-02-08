@@ -3,10 +3,21 @@ const TICKER_REGEX = /\$([A-Za-z]+)\b/g;
 
 let currentPopover = null;
 
-function createPopover(text, element) {
-  if (currentPopover) {
-    currentPopover.remove();
+async function fetchJoke(popover) {
+  try {
+    const response = await fetch('https://icanhazdadjoke.com/slack');
+    const jokeData = await response.json();
+    const jokeText = jokeData.attachments[0].text;
+    const jokeElement = popover.querySelector('#jokeElement');
+    if (jokeElement) jokeElement.textContent = jokeText;
+  } catch (error) {
+    const jokeElement = popover.querySelector('#jokeElement');
+    if (jokeElement) jokeElement.textContent = 'Could not fetch joke 😢';
   }
+}
+
+function createPopover(text, element) {
+  if (currentPopover) currentPopover.remove();
 
   const popover = document.createElement('div');
   popover.className = 'sol-popover';
@@ -14,10 +25,9 @@ function createPopover(text, element) {
     <h3>${text.startsWith('$') ? 'Token' : 'Address'}</h3>
     <div>${text}</div>
     <hr>
+    <p id="jokeElement">Loading joke...</p>
     <strong>Dummy Data:</strong>
     <div>Price: $0.00</div>
-    <div>24h Vol: $0.00</div>
-    <div>MCap: $0.00</div>
   `;
 
   const rect = element.getBoundingClientRect();
@@ -26,8 +36,12 @@ function createPopover(text, element) {
   
   document.body.appendChild(popover);
   currentPopover = popover;
+  
+  // Fetch and display joke immediately
+  fetchJoke(popover);
 }
 
+// Rest of the code remains the same
 function processTextNode(node) {
   const parent = node.parentElement;
   if (parent.classList.contains('sol-highlight')) return;

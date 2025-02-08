@@ -15,7 +15,7 @@
   /* Style for the popover */
   .sol-popover {
     position: absolute;
-    background-color: #ffffff; /* White background */
+    background-color: #b10b0b; /* White background */
     border: 1px solid #ddd; /* Light gray border */
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */

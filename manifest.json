@@ -8,5 +8,8 @@
       "matches": ["*://*/*"],
       "css": ["styles.css"],
       "js": ["content.js"]
-    }]
+    }],
+    "action": {
+      "default_popup": "popup.html"
+    }
   }
