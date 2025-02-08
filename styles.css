@@ -1,67 +1,135 @@
-/* Style for highlighted Solana addresses and tickers */
 .sol-highlight {
-  background-color: transparent;
-  color: #ffffff; /* White text */
-  font-weight: bold;
+  background-color: #10b981;
+  color: #23518d;
+  font-weight: 500;
   padding: 2px 4px;
-  border-radius: 3px;
+  border-radius: 4px;
   cursor: pointer;
-  transition: color 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .sol-highlight:hover {
-  color: #00ff00; /* Neon green hover effect */
+  color: #10b981;
+  background-color: rgba(16, 185, 129, 0.05);
 }
 
 /* Style for the popover */
 .sol-popover {
   position: absolute;
-  background-color: #0d0d0d; /* Dark background */
-  border: 1px solid #333; /* Dark gray border */
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Stronger shadow */
-  padding: 12px;
-  font-family: Arial, sans-serif;
+  background-color: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(75, 85, 99, 0.2);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  padding: 16px;
+  font-family: system-ui, -apple-system, sans-serif;
   z-index: 1000;
-  max-width: 250px;
+  min-width: 400px;
   word-wrap: break-word;
-  color: #ffffff; /* White text */
+  color: #f3f4f6;
 }
 
 /* Header */
 .sol-popover h3 {
-  margin: 0 0 8px 0;
-  font-size: 16px;
-  font-weight: bold;
-  color: #00ff00; /* Neon green */
+  margin: 0 0 12px 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #10b981;
+  letter-spacing: 0.01em;
 }
 
 /* Text inside popover */
 .sol-popover div {
-  margin: 4px 0;
-  font-size: 14px;
-  color: #ccc; /* Light gray */
+  margin: 6px 0;
+  font-size: 13px;
+  color: #9ca3af;
+  line-height: 1.5;
+}
+
+/* Grid container for mint data */
+#mintData {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px 16px;
+  margin-top: 8px;
+}
+
+#mintData > div {
+  margin: 0;
+  padding: 4px 0;
+}
+
+/* Loading and error states */
+#loading,
+#error {
+  text-align: center;
+  padding: 12px 0;
 }
 
 /* Separator */
 .sol-popover hr {
   border: 0;
   height: 1px;
-  background-color: #333; /* Dark gray separator */
-  margin: 8px 0;
+  background-color: rgba(75, 85, 99, 0.2);
+  margin: 12px 0;
 }
 
 /* Labels */
 .sol-popover strong {
-  font-weight: bold;
-  color: #ff9800; /* Orange */
+  font-weight: 600;
+  color: #f59e0b;
 }
 
-/* Specific data colors */
-#devBuy { color: #3399ff; } /* Blue */
-#sniperBuy { color: #ff4444; } /* Red */
-#t10HoldingPct { color: #ffcc00; } /* Yellow */
-#holders { color: #ffffff; } /* White */
-#susCount { color: #ff4444; } /* Red */
-#bundleCount { color: #9933ff; } /* Purple */
-#termHoldingPct { color: #33cc33; } /* Green */
+/* Add these new rules */
+.data-icon {
+  width: 14px;
+  height: 14px;
+  vertical-align: middle;
+  margin-right: 5px;
+}
+
+.header-icon {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+  margin-right: 5px;
+}
+
+/* Keep existing styles below */
+.sol-highlight {
+  background-color: transparent;
+  color: #e2e8f0;
+  font-weight: 500;
+  padding: 2px 4px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+/* ... rest of your existing CSS ... */
+
+
+.dev-label{
+  color: #4c6ef5; 
+}
+.sniper-label{
+  color: #ff9466; 
+}
+.t10HoldingPct-label{
+  color: #F21206; 
+}
+.holders-label{
+  color: #6B7280; 
+}
+.susCount-label{
+  color: #4caf50; 
+}
+.bundleCount-label{
+  color: #a855f7; 
+}
+.termHoldingPct-label{
+  color: 
+  #b2d8d8
+  ; 
+}
+
+
