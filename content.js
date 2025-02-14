@@ -155,3 +155,35 @@ new MutationObserver(debouncedInitializeHighlights).observe(document.body, {
   childList: true,
   subtree: true,
 });
+
+if (window.location.href.includes('en/lp')) {
+  // Create the buy button element
+  const buyButton = document.createElement('button');
+  buyButton.innerText = 'Buy';
+  
+  // Style the button to appear at the top of the page
+  Object.assign(buyButton.style, {
+    position: 'fixed',
+    top: '10px',
+    right: '10px',
+    padding: '10px 20px',
+    fontSize: '16px',
+    backgroundColor: '#28a745',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '5px',
+    zIndex: 10000,
+    cursor: 'pointer'
+  });
+  
+  // Optionally add an event listener to handle button clicks
+  buyButton.addEventListener('click', () => {
+    // Your buy functionality or API call goes here
+    console.log('Buy button clicked!');
+    // For example, open a new tab or call your API
+  });
+  
+  // Insert the button into the DOM (e.g., append to document body)
+  document.body.appendChild(buyButton);
+}
+
